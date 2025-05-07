@@ -1,4 +1,10 @@
 import pygame
+import sys
+import socket
+
+clinet = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(("localhost", 5000))
+
 
 pygame.init()
 
@@ -23,11 +29,16 @@ def draw(display):
 
 fps = pygame.time.Clock()
 while True:
+
+
   fps.tick(30)
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
+
+
+
   display.fill("black")
   draw(display)
   pygame.display.update()

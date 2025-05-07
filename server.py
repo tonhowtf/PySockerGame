@@ -1,4 +1,6 @@
 import socket
+import pickle
+import threads
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("localhost", 5000))
@@ -14,7 +16,23 @@ game_status = {
   "ball_dir_y":1
             }
 
+clients = []
+def receive_data(conn, addr):
+  global game_status
+
+  clients.append(conn)
+  print(f"Um cliente novo se conectou: {addr}")
+
+  try:
+    while True:
+      data = pickle.loads(conn.recv(1024))
+      print(data)
+  except Exception as error:
+    print(error)
+
 while True:  
 
   conn, addr = server.accept()
   print(f"Um cliente novo se conectou: {addr}")
+
+  

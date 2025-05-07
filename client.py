@@ -1,6 +1,7 @@
 import pygame
 import sys
 import socket
+import pickle
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(("localhost", 5000))
@@ -37,7 +38,11 @@ while True:
       pygame.quit()
       sys.exit()
 
-
+  key = pygame.key.get_pressed()
+  if key[pygame.K_UP]:
+    client.sendall(pickle.dumps("UP"))
+  elif key[pygame.K_DOWN]:  
+    client.sendall(pickle.dumps("Down"))
 
   display.fill("black")
   draw(display)

@@ -2,7 +2,7 @@ import pygame
 import sys
 import socket
 
-clinet = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(("localhost", 5000))
 
 
@@ -22,8 +22,8 @@ game_status = {
             }
 
 def draw(display):
-  pygame.draw.rect(display, "blue", game_status[player1])
-  pygame.draw.rect(display, "red", game_status[player2])
+  pygame.draw.rect(display, "blue", game_status["player1"])
+  pygame.draw.rect(display, "red", game_status["player2"])
   pygame.draw.circle(display, "white", game_status["ball"], 10)
 
 

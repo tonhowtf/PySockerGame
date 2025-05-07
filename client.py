@@ -7,10 +7,18 @@ HEIGHT = 360
 
 display = pygame.display.set_mode((WIDTH, HEIGHT))
 
+game_status = {
+  "player1": [20, 250, 20, 40],
+  "player2": [600, 250, 20, 40],
+  "ball": (320,180),
+  "ball_dir_x":1,
+  "ball_dir_y":1
+            }
+
 def draw(display):
-  pygame.draw.rect(display, "blue", [20, 250, 20, 40])
-  pygame.draw.rect(display, "red", [600, 250, 20, 40])
-  pygame.draw.circle(display, "white", (320, 180), 10)
+  pygame.draw.rect(display, "blue", game_status[player1])
+  pygame.draw.rect(display, "red", game_status[player2])
+  pygame.draw.circle(display, "white", game_status["ball"], 10)
 
 
 fps = pygame.time.Clock()

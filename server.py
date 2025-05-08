@@ -37,6 +37,15 @@ def receive_data(conn, addr, player_name):
 
   except Exception as error:
     print(error)
+
+  def check_collision(ball, player):
+    ball_x, ball_y = ball
+    player_x, player_y, player_width, player_height = player
+
+    closest_x = max(player_x, min(ball_x, player_x + player_width))
+    closest_y = max(player_y, min(ball_y, player_y + player_height))
+
+    return (ball_x - closest_x) ** 2 + (ball_y - closest_y) ** 2 < (10 ** 2)
   
   def update_game_status():
 

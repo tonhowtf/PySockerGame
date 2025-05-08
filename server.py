@@ -1,6 +1,6 @@
 import socket
 import pickle
-import threads
+import threading
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("localhost", 5000))
@@ -23,16 +23,23 @@ def receive_data(conn, addr):
   clients.append(conn)
   print(f"Um cliente novo se conectou: {addr}")
 
+  
   try:
     while True:
       data = pickle.loads(conn.recv(1024))
-      print(data)
+      
+      if data == "UP":
+        game_status["player1"][1] -= 1
+      elif data == "DOWN":
+        game_status["player1"][1] += 1
+      conn.sendall(pickle.dumps(game_status))
+
   except Exception as error:
     print(error)
 
 while True:  
 
   conn, addr = server.accept()
-  print(f"Um cliente novo se conectou: {addr}")
+  threading.Thread(target=receive_data, args=(conn, addr), daemon=True).start()
 
   

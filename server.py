@@ -1,6 +1,7 @@
 import socket
 import pickle
 import threading
+import time
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("localhost", 5000))
@@ -32,11 +33,34 @@ def receive_data(conn, addr, player_name):
         game_status[player_name][1] -= 1
       elif data == "DOWN":
         game_status[player_name][1] += 1
-      for client in clients:
-        client.sendall(pickle.dumps(game_status))
+      
 
   except Exception as error:
     print(error)
+  
+  def update_game_status():
+
+    global game_status
+
+    try:
+      while True:
+
+        game_status["ball"][0] += game_status["ball_dir_x"]
+        game_status["ball"][1] += game_status["ball_dir_y"]
+
+        if game_status["ball"][0] < 0 or game_status["ball"][0] > 640:
+          game_status["ball_dir_x"] *= -1
+        
+        if game_status["ball"][1] < 0 or game_status["ball"][1] > 360:
+          game_status["ball_dir_y"] *= -1
+
+        for client in clients:
+          client.sendall(picklçe.dumps(game_status))
+
+          time.sleep(0.1)
+    except Exception as error:
+      print(f"Erro encontrado: {error}")
+
 
 while True:  
 

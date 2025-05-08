@@ -4,7 +4,7 @@ import threading
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("localhost", 5000))
-server.listen()
+server.listen(2)
 
 print("Servidor iniciado: ")
 
@@ -17,7 +17,7 @@ game_status = {
             }
 
 clients = []
-def receive_data(conn, addr):
+def receive_data(conn, addr, player_name):
   global game_status
 
   clients.append(conn)
@@ -29,10 +29,11 @@ def receive_data(conn, addr):
       data = pickle.loads(conn.recv(1024))
       
       if data == "UP":
-        game_status["player1"][1] -= 1
+        game_status[player_name][1] -= 1
       elif data == "DOWN":
-        game_status["player1"][1] += 1
-      conn.sendall(pickle.dumps(game_status))
+        game_status[player_name][1] += 1
+      for client in clients:
+        client.sendall(pickle.dumps(game_status))
 
   except Exception as error:
     print(error)
@@ -40,6 +41,10 @@ def receive_data(conn, addr):
 while True:  
 
   conn, addr = server.accept()
-  threading.Thread(target=receive_data, args=(conn, addr), daemon=True).start()
+  if len(clients) == 0:
+    player_name = "player1"
+  else:
+    player_name = "player2"
+  threading.Thread(target=receive_data, args=(conn, addr, player_name), daemon=True).start()
 
   
